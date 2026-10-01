@@ -13,13 +13,31 @@ import { Route } from 'react-router-dom';
 import { Guard } from '$app/common/guards/Guard';
 import { permission } from '$app/common/guards/guards/permission';
 
+import { receivablesPreviewEnabled } from './receivables/preview';
+const ReceivablesPreview = lazy(
+  () => import('./receivables/ReceivablesPreview')
+);
+
 const Reports = lazy(() => import('$app/pages/reports/index/Reports'));
 
 export const reportRoutes = (
-  <Route
-    path="/reports"
-    element={
-      <Guard guards={[permission('view_reports')]} component={<Reports />} />
-    }
-  />
+  <>
+    <Route
+      path="/reports"
+      element={
+        <Guard guards={[permission('view_reports')]} component={<Reports />} />
+      }
+    />
+    {receivablesPreviewEnabled && (
+      <Route
+        path="/reports/receivables-preview"
+        element={
+          <Guard
+            guards={[permission('view_reports')]}
+            component={<ReceivablesPreview />}
+          />
+        }
+      />
+    )}
+  </>
 );
