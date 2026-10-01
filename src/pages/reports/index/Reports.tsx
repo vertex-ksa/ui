@@ -1,3 +1,5 @@
+import { receivablesPreviewEnabled } from '../receivables/preview';
+import { Link as PreviewLink } from '$app/components/forms';
 /**
  * Invoice Ninja (https://invoiceninja.com).
  *
@@ -525,31 +527,38 @@ export default function Reports() {
       saveButtonLabel={t('export')}
       disableSaveButton={isPendingExport || (!proPlan() && !enterprisePlan())}
       navigationTopRight={
-        <Dropdown
-          label={t('actions')}
-          disabled={!proPlan() && !enterprisePlan()}
-        >
-          {report.supports_previews && !report.payload?.template_id && (
-            <DropdownElement
-              icon={<Icon element={MdOutlinePreview} />}
-              onClick={handlePreview}
-            >
-              {t('preview')}
-            </DropdownElement>
+        <>
+          {receivablesPreviewEnabled && (
+            <PreviewLink to="/reports/receivables-preview">
+              {t('rp_title')}
+            </PreviewLink>
           )}
-
-          <DropdownElement
-            icon={<Icon element={MdSchedule} />}
-            onClick={() => {
-              const reportKeys = resolveReportKeys();
-
-              commitCustomColumnsDraft();
-              scheduleReport(report, showCustomColumns, reportKeys);
-            }}
+          <Dropdown
+            label={t('actions')}
+            disabled={!proPlan() && !enterprisePlan()}
           >
-            {t('schedule')}
-          </DropdownElement>
-        </Dropdown>
+            {report.supports_previews && !report.payload?.template_id && (
+              <DropdownElement
+                icon={<Icon element={MdOutlinePreview} />}
+                onClick={handlePreview}
+              >
+                {t('preview')}
+              </DropdownElement>
+            )}
+
+            <DropdownElement
+              icon={<Icon element={MdSchedule} />}
+              onClick={() => {
+                const reportKeys = resolveReportKeys();
+
+                commitCustomColumnsDraft();
+                scheduleReport(report, showCustomColumns, reportKeys);
+              }}
+            >
+              {t('schedule')}
+            </DropdownElement>
+          </Dropdown>
+        </>
       }
     >
       <ReportsPlanAlert />
