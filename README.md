@@ -1,5 +1,7 @@
 # Invoice Ninja
 
+This Vertex fork includes modifications to the upstream software. See [MODIFICATIONS.md](MODIFICATIONS.md) for the changed native workflow and retained licensing terms.
+
 ### `npm run dev`
 
 Runs the app in the development mode.\
